@@ -1,0 +1,77 @@
+<div class="center-wrapper">
+  <form class="card" (ngSubmit)="onSubmit()" novalidate>
+    <!-- DEBUG: bouton toujours visible et style forcé -->
+    <button
+      type="button"
+      class="back debug-back"
+      (click)="prev()"
+      aria-label="Retour"
+      title="Retour"
+      *ngIf="step > 0"
+    >
+      ←
+    </button>
+
+    <h1 class="title">Bienvenue</h1>
+
+    <div class="steps-viewport">
+      <div class="steps-inner" [style.transform]="getTranslate()">
+        <!-- STEP 0 : Prénom -->
+        <div class="step">
+          <label class="field">
+            <span class="label-title">Prénom</span>
+            <input
+              #first
+              type="text"
+              name="name"
+              [(ngModel)]="name"
+              required
+              autocomplete="name"
+              (keydown.enter)="next()"
+              placeholder="Ex : Jean"
+            />
+          </label>
+        </div>
+
+        <!-- STEP 1 : Adresse -->
+        <div class="step">
+          <label class="field">
+            <span class="label-title">Adresse</span>
+            <textarea
+              #second
+              name="address"
+              rows="5"
+              [(ngModel)]="address"
+              required
+              placeholder="Ex : 101 chemin Matens, Gaillac"
+            ></textarea>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="btn ghost" (click)="prev()" *ngIf="step === 1">Précédent</button>
+
+      <div class="spacer"></div>
+
+      <button type="button" class="btn" (click)="next()" *ngIf="step === 0" [disabled]="!name.trim()">
+        Suivant
+      </button>
+
+      <button type="submit" class="btn" *ngIf="step === 1" [disabled]="!address.trim()">
+        Enregistrer
+      </button>
+    </div>
+
+    <div class="dots" aria-hidden="true">
+      <span class="dot" [class.active]="step === 0"></span>
+      <span class="dot" [class.active]="step === 1"></span>
+    </div>
+
+    <!-- Affichage seulement après l'enregistrement à l'étape 1 -->
+    <p class="hint" *ngIf="step === 1 && userLocal">
+      <strong>Enregistré :</strong> {{ userLocal.name }} — {{ userLocal.address }}
+    </p>
+  </form>
+</div>

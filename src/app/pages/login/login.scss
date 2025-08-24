@@ -1,0 +1,204 @@
+:host {
+  --bg: #071026;
+  --card: rgba(255,255,255,0.03);
+  --accent: #7c5cff;
+  --accent-2: #5a8bff;
+  --text: #e6eef8;
+  --muted: #9fb0c7;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+.center-wrapper {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, var(--bg) 0%, #071a2a 100%);
+  padding: 24px;
+}
+
+.card {
+  position: relative; /* nécessaire pour placer le back button */
+  width: min(560px, 92vw);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+  backdrop-filter: blur(8px);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* Back button */
+.back {
+  z-index: 10;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 140ms, color 140ms, transform 120ms;
+}
+.back:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--muted);
+  padding-top: 4px; /* petit espace sous le bouton retour */
+}
+
+/* Steps viewport */
+.steps-viewport {
+  min-height: 170px; /* laisse de la place pour textarea */
+  height: auto;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.steps-inner {
+  display: flex;
+  width: 200%; /* 2 steps */
+  transition: transform 320ms cubic-bezier(.2,.9,.24,1);
+  align-items: flex-start;
+}
+
+.step {
+  width: 50%;
+  padding: 10px 0 22px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Field */
+.field {
+  width: 92%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-title {
+  font-size: 13px;
+  color: var(--muted);
+  user-select: none;
+}
+
+/* Inputs + textarea */
+input,
+textarea {
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.35;
+  outline: none;
+  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  max-height: calc(100vh - 340px);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(230,238,248,0.45);
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: 0 10px 30px rgba(124,92,255,0.12);
+  border-color: rgba(124,92,255,0.9);
+  transform: translateY(-2px);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(92,75,255,0.18);
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: none;
+}
+
+.spacer { flex: 1 1 auto; }
+
+/* Dots */
+.dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.04);
+  transition: transform 180ms, background 180ms;
+}
+.dot.active {
+  transform: scale(1.2);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  padding-top: 4px;
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  .card { padding: 16px; }
+  .steps-viewport { min-height: 200px; }
+  .step { padding-bottom: 26px; }
+  input, textarea { padding: 12px; }
+}
