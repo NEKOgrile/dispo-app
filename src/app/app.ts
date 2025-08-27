@@ -1,13 +1,10 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./pages/login/login";
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoginComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [RouterModule],
+  template: `<router-outlet></router-outlet>`,
 })
-export class App {
-  protected readonly title = signal('dispo-app');
-}
+export class AppComponent {}

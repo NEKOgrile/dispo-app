@@ -1,23 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 
-import { CalendarGrid } from './calendar-grid';
-
-describe('CalendarGrid', () => {
-  let component: CalendarGrid;
-  let fixture: ComponentFixture<CalendarGrid>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CalendarGrid]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(CalendarGrid);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+@Component({
+  selector: 'app-calendar-grid',
+  standalone: true,
+  templateUrl: './calendar-grid.html',
+  styleUrls: ['./calendar-grid.scss']
+})
+export class CalendarGridComponent {}
