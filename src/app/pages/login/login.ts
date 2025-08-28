@@ -41,6 +41,15 @@ export class LoginComponent implements AfterViewInit {
       address: this.address.trim()
     }));
   }
+  getUserFromLocalStorage(): { name: string; address: string } | null {
+    const saved = localStorage.getItem('app_user');
+    if (!saved) return null;
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return null;
+    }
+  }
 
   ngOnInit() {
     const saved = localStorage.getItem('app_user');
