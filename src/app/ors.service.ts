@@ -2,23 +2,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { SupabaseService } from './supabase'; // si tu as encore besoin du supabaseService pour autre chose
 
 @Injectable({ providedIn: 'root' })
 export class OrsService {
-  private apiKey = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImFkOTZkNmM5NzZiNTRjNGM5MTJhOWYzNDkyZmMwNjYwIiwiaCI6Im11cm11cjY0In0='; // remplace par ta clé
+  private apiKey = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImFkOTZkNmM5NzZiNTRjNGM5MTJhOWYzNDkyZmMwNjYwIiwiaCI6Im11cm11cjY0In0='; // remplace par ta clé ou get depuis env
   private baseUrl = 'https://api.openrouteservice.org';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private supabaseService: SupabaseService // optionnel : seulement si tu l'utilises
+  ) {}
 
   private authHeaders() {
     return new HttpHeaders({
-      'Authorization': this.apiKey,
+      Authorization: this.apiKey,
       'Content-Type': 'application/json'
     });
   }
 
   geocode(address: string) {
-    // Pelias geocode accepte aussi api_key en query, mais on met le header pour être consistent
     const url = `${this.baseUrl}/geocode/search?text=${encodeURIComponent(address)}`;
     return this.http.get<any>(url, { headers: this.authHeaders() }).pipe(
       map(res => {

@@ -78,44 +78,74 @@ export class LoginComponent implements AfterViewInit {
   }
 
   async onSubmit() {
-    if (!this.address.trim()) return;
+  if (!this.address.trim()) return;
 
-    // 1. Sauvegarde locale comme avant
-    this.saveToLocalStorage();
+  // 1) sauvegarde locale (déjà fait)
+  this.saveToLocalStorage();
 
-    // 2. Vérifier dans Supabase si l'utilisateur existe déjà
-    const { data: existing, error } = await this.supabaseService.supabase
+  // 2) vérifier si l'utilisateur existe déjà en DB
+  const { data: existing, error } = await this.supabaseService.supabase
+    .from('users')
+    .select('*')
+    .eq('name', this.name.trim())
+    .eq('address', this.address.trim());
+
+  if (error) {
+    console.error('❌ Erreur Supabase:', error.message);
+    return;
+  }
+
+
+
+
+  let userFromDb: any = null;
+
+  if (existing && existing.length > 0) {
+    // utilisateur trouvé
+    userFromDb = existing[0];
+    console.log('⚠️ Déjà présent dans Supabase:', userFromDb);
+  } else {
+    // insérer l'utilisateur
+    const { data: inserted, error: insertError } = await this.supabaseService.supabase
       .from('users')
-      .select('*')
-      .eq('name', this.name.trim())
-      .eq('address', this.address.trim());
+      .insert([{ name: this.name.trim(), address: this.address.trim() }])
+      .select()
+      .single(); // récupère l'objet inséré directement
 
-    if (error) {
-      console.error('❌ Erreur Supabase:', error.message);
+    if (insertError) {
+      console.error('❌ Erreur insertion:', insertError.message);
       return;
     }
+    userFromDb = inserted;
+    console.log('✅ Ajouté dans Supabase:', userFromDb);
+    console.log("INSERTED =", inserted);
 
-    if (existing && existing.length > 0) {
-      console.log('⚠️ Déjà présent dans Supabase:', existing[0]);
-    } else {
-      // 3. Insérer si pas trouvé
-      const { data: inserted, error: insertError } = await this.supabaseService.supabase
-        .from('users')
-        .insert([
-          { name: this.name.trim(), address: this.address.trim() }
-        ])
-        .select();
-
-      if (insertError) {
-        console.error('❌ Erreur insertion:', insertError.message);
-        return;
-      }
-
-      console.log('✅ Ajouté dans Supabase:', inserted[0]);
-    }
-
-    this.router.navigate(['/calendar']);;
   }
+    console.log("existing = " , existing)
+
+  // 3) s'assurer que l'utilisateur a une couleur (assignation si besoin)
+  try {
+    // userFromDb.id doit exister (uuid de supabase)
+    const color = await this.supabaseService.ensureUserColor(userFromDb.id);
+
+    // 4) mettre à jour le localStorage avec id, name, address, color
+    const local = {
+      id: userFromDb.id,
+      name: userFromDb.name,
+      address: userFromDb.address,
+      color
+    };
+    localStorage.setItem('app_user', JSON.stringify(local));
+
+  } catch (err) {
+    console.error('Erreur lors de l\'assignation de couleur :', err);
+    // tu peux quand même continuer sans couleur, ou choisir une couleur par défaut
+  }
+
+  // 5) navigation vers le calendar
+  this.router.navigate(['/calendar']);
+}
+
 
 
   getTranslate() {
