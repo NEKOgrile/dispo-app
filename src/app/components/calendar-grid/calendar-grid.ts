@@ -118,14 +118,15 @@ export class CalendarGridComponent implements OnInit {
       }
     }
 
-    // --- Calendrier (15 derniers jours / 15 prochains jours) ---
-    this.days = [];
-    const today = new Date();
-    for (let i = -15; i <= 15; i++) {
-      const d = new Date();
-      d.setDate(today.getDate() + i);
-      this.days.push({ date: d, users: [] });
-    }
+this.days = [];
+const today = new Date();
+
+for (let i = 0; i < 30; i++) {
+  const d = new Date();
+  d.setDate(today.getDate() + i);
+  this.days.push({ date: d, users: [] });
+}
+
 
     // 🔄 Remplir les pastilles à partir des dispos en DB
     this._fillDotsFromDB();

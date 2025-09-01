@@ -64,12 +64,14 @@ export class LoginComponent implements AfterViewInit {
     }
   }
 
-  next() {
-    if (!this.name.trim()) return;
-    this.saveToLocalStorage();
-    this.step = 1;
-    setTimeout(() => this.secondRef?.nativeElement.focus(), 260);
-  }
+next(event?: Event) {
+  event?.preventDefault(); // ⛔ bloque le submit auto
+  if (!this.name.trim()) return;
+  this.saveToLocalStorage();
+  this.step = 1;
+  setTimeout(() => this.secondRef?.nativeElement.focus(), 260);
+}
+
 
   prev() {
     this.saveToLocalStorage();
