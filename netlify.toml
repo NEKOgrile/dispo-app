@@ -1,8 +1,10 @@
+@'
 [build]
   command = "npm run build"
-  publish = "dist/dispo-app"
+  publish = "dist/dispo-app/browser"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+'@ | Set-Content -Path .\netlify.toml -Encoding UTF8
